@@ -93,7 +93,7 @@ hashes.value.forEach(hash => {
 
    if(item.hash.length-hash.length<item.hash.length/2)
     {
-      
+
       if(item.hash.startsWith(hash.toLowerCase()))
         {
           revealed.value.push({hash: item.hash,pass: item.pass,type:hashtype,match:"partial",original:hash});
@@ -119,7 +119,7 @@ hashes.value.forEach(hash => {
 
    if(item.hash.length-entry.length<item.hash.length/2)
     {
-      
+
       if(item.hash.startsWith(entry.toLowerCase()))
         {
           revealed.value.push({hash: item.hash,pass: item.pass,type:hashtype,match:"last",original:hash});
@@ -137,7 +137,7 @@ hashes.value = hashes.value.filter(h => !matchedHashes.includes(h.toLowerCase())
 
 
 const parseResults= async (results,hashtype) => {
-  
+
 
 await fullMatch(results,hashtype);
 await partialMatch(results,hashtype);
@@ -149,7 +149,7 @@ const handleLookupSHA256 = async () => {
   let processedLines = new Set ();
 
   hashes.value.forEach((line) => {
-   
+
     if (line.length >= 60 &&  line.length <= 64 && /^[0-9a-fA-F]+$/i.test(line)) {
       processedLines.add(line.substring(0, 6));
     }
@@ -163,7 +163,7 @@ const handleLookupSHA256 = async () => {
   // Loop through the processed lines and fetch & parse results one by one
   for (let hash of processedLines) {
     try {
-      let data = await fetchData(hash); 
+      let data = await fetchData(hash);
      await parseResults([data], "sha256");
     } catch (error) {
       console.error(`Error fetching data for hash ${hash}:`, error);
@@ -177,7 +177,7 @@ const handleLookupSHA1 = async () => {
   let processedLines = new Set ();
 
   hashes.value.forEach((line) => {
-   
+
     if (line.length >= 38 && line.length <= 40 && /^[0-9a-fA-F]+$/i.test(line)) {
       processedLines.add(line.substring(0, 6));
     }
@@ -190,7 +190,7 @@ const handleLookupSHA1 = async () => {
 
   for (let hash of processedLines) {
     try {
-      let data = await fetchData(hash); 
+      let data = await fetchData(hash);
      await parseResults([data], "sha1");
     } catch (error) {
       console.error(`Error fetching data for hash ${hash}:`, error);
@@ -202,9 +202,9 @@ const handleLookupSHA1 = async () => {
 
 const handleLookupMD5 = async () => {
   let processedLines = new Set ();
-  
+
   hashes.value.forEach((line) => {
-   
+
     if (line.length >= 30 &&  line.length <= 32 && /^[0-9a-fA-F]+$/i.test(line)) {
       processedLines.add(line.substring(0, 6));
     }
@@ -219,7 +219,7 @@ const handleLookupMD5 = async () => {
   for (let hash of processedLines) {
     try {
       console.log(hash);
-      let data = await fetchData(hash); 
+      let data = await fetchData(hash);
      await parseResults([data], "md5");
     } catch (error) {
       console.error(`Error fetching data for hash ${hash}:`, error);
@@ -232,7 +232,7 @@ const handleLookupNTLM = async () => {
   let processedLines = new Set ();
 
   hashes.value.forEach((line) => {
-   
+
     if (line.length >= 30 &&   line.length <= 32 && /^[0-9a-fA-F]+$/i.test(line)) {
       processedLines.add(line.substring(0, 6));
     }
@@ -246,7 +246,7 @@ const handleLookupNTLM = async () => {
 
   for (let hash of processedLines) {
     try {
-      let data = await fetchData(hash); 
+      let data = await fetchData(hash);
      await parseResults([data], "ntlm");
     } catch (error) {
       console.error(`Error fetching data for hash ${hash}:`, error);
@@ -278,13 +278,13 @@ const handleLookup = async () => {
     console.error("Error during NTLM lookup:", error);
   }
   try {
-  await handleLookupSHA1();  
+  await handleLookupSHA1();
 }
   catch (error) {
     console.error("Error during SHA1 lookup:", error);
   }
   try {
-  await handleLookupSHA256();  
+  await handleLookupSHA256();
 }
   catch (error) {
     console.error("Error during SHA256 lookup:", error);
@@ -292,7 +292,7 @@ const handleLookup = async () => {
 
 
   try {
-  await cleanUp();  
+  await cleanUp();
 }
   catch (error) {
     console.error("Cleanup failed:", error);
@@ -305,7 +305,7 @@ const handleLookup = async () => {
 
 const generateFullCSV = () => {
   const csvContent = generateCSVContent([
-    ['Hash', 'Match','Type','Password'], 
+    ['Hash', 'Match','Type','Password'],
     ...revealed.value.map(item => [
       item.hash,
       item.match !== false ? item.match : 'no match',
@@ -321,13 +321,13 @@ const generateFullCSV = () => {
 
 const generateFilteredCSV = () => {
   const csvContent = generateCSVContent([
-    ['Hash', 'Match',  'Type','Password'], 
+    ['Hash', 'Match',  'Type','Password'],
     ...revealed.value
       .filter(item => item.match !== false)
       .map(item => [
         item.hash,
         item.match,
-        
+
         item.type,
         item.pass,
       ])
@@ -375,12 +375,12 @@ const downloadCSV = (csvContent, filename) => {
             <form @submit.prevent="handleLookup">
             <div class="field">
   <div class="control">
-    <textarea class="textarea"   
+    <textarea class="textarea"
     placeholder="bef58f652fddb1c20ecbfdb7cf31d932
 One hash per line"  rows="7" v-model="content"></textarea>
   </div>
 </div>
-   
+
   <div class="field">
   <div class="control">
     <button type="submit" class="button is-link" :disabled="isProcessing">
@@ -411,25 +411,25 @@ One hash per line"  rows="7" v-model="content"></textarea>
 
           <div class="field is-grouped">
   <div class="control">
-    <button class="button is-link" @click="generateFilteredCSV" > 
-      
+    <button class="button is-link" @click="generateFilteredCSV" >
+
       <span class="icon-text">
 
         <span>Found ({{ strictCount+partialCount + lastCount }})</span>
 
       </span>
-      
+
       </button>
   </div>
   <div class="control">
-    <button class="button is-link" @click="generateFullCSV"> 
-      
+    <button class="button is-link" @click="generateFullCSV">
+
       <span class="icon-text">
 
         <span>All ({{ strictCount+partialCount + lastCount+noMatchCount }})</span>
 
       </span>
-      
+
       </button>
   </div>
 </div>
@@ -458,7 +458,7 @@ One hash per line"  rows="7" v-model="content"></textarea>
           </thead>
           <tbody>
             <tr  v-for="(item, index) in filteredRows" :key="index">
-              <td             
+              <td
             :class="{
             'is-primary': item.match === 'strict',
             'is-success': item.match === 'partial' || item.match === 'last',
@@ -493,7 +493,7 @@ One hash per line"  rows="7" v-model="content"></textarea>
             <div class="is-flex">
               <div>
 
-                <p class="has-text-grey-dark">In the <code>/db/</code> folder, you'll find an example structure of the database. Currently, this tool uses <code>https://weakpass.com/api/v1/range</code> as the primary tool URL. However, you can implement your own and change the <code>API_URL</code> value to use it.</p>
+                <p class="has-text-grey">In the <code>/db/</code> folder, you'll find an example structure of the database. Currently, this tool uses <code>https://weakpass.com/api/v1/range</code> as the primary tool URL. However, you can implement your own and change the <code>API_URL</code> value to use it.</p>
               </div>
             </div>
 
@@ -518,7 +518,7 @@ One hash per line"  rows="7" v-model="content"></textarea>
 
 
 
-    
+
     <br/>
 
 </section>

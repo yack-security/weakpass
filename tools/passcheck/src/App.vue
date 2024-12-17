@@ -6,7 +6,7 @@ function endingsUpToThreeNumbersProcessing(input) {
     const result = new Map();
     const match = input.match(/(\d+)$/);
     if (match) {
-        const numbers = match[1]; 
+        const numbers = match[1];
         const numLength = numbers.length;
         for (let i = 1; i <= numLength; i++) {
             const remainingString = input.slice(0, -i);
@@ -100,7 +100,7 @@ function processPatternEnding(input) {
                 .map(char => `$${char}`)
                 .join('');
             result.set(remainingString, formattedPattern);
-            break; 
+            break;
         }
     }
 
@@ -112,7 +112,7 @@ function processCapitalisedFirstLetter(input) {
     if(input.length==0)return result;
     if (input[0] === input[0].toUpperCase() && input[0] !== input[0].toLowerCase()) {
         const modifiedString = input[0].toLowerCase() + input.slice(1);
-        result.set(modifiedString, 'c'); 
+        result.set(modifiedString, 'c');
     }
 
     return result;
@@ -126,38 +126,38 @@ function processPrefixPatterns(input) {
 
     for (const prefix of specialPrefixes) {
         if (input.startsWith(prefix)) {
-            const remainingString = input.slice(prefix.length); 
-            const reversedPrefix = prefix.split('').reverse().map(char => `^${char}`).join(''); 
+            const remainingString = input.slice(prefix.length);
+            const reversedPrefix = prefix.split('').reverse().map(char => `^${char}`).join('');
             result.set(remainingString, reversedPrefix);
-            return result; 
+            return result;
         }
     }
 
     if (yearRegex.test(input)) {
         const year = input.match(yearRegex)[0];
-        const remainingString = input.slice(year.length); 
-        const reversedYear = year.split('').reverse().map(char => `^${char}`).join(''); 
+        const remainingString = input.slice(year.length);
+        const reversedYear = year.split('').reverse().map(char => `^${char}`).join('');
         result.set(remainingString, reversedYear);
-        return result; 
+        return result;
     }
 
     if (numberRegex.test(input)) {
         const number = input.match(numberRegex)[0];
-        const remainingString = input.slice(number.length); 
-        const reversedNumber = number.split('').reverse().map(char => `^${char}`).join(''); 
+        const remainingString = input.slice(number.length);
+        const reversedNumber = number.split('').reverse().map(char => `^${char}`).join('');
         result.set(remainingString, reversedNumber);
-        return result; 
+        return result;
     }
 
-    return result; 
+    return result;
 }
 
 function processDoubledWords(input) {
     const result = new Map();
     const doubledRegex = /^(.+)\1$/;
     if (doubledRegex.test(input)) {
-        const word = input.match(doubledRegex)[1]; 
-        result.set(word, 'd'); 
+        const word = input.match(doubledRegex)[1];
+        result.set(word, 'd');
     }
 
     return result;
@@ -168,9 +168,9 @@ function processReversedDoubles(input) {
     if (input.length % 2 === 0) {
         const halfLength = input.length / 2;
         const firstHalf = input.slice(0, halfLength);
-        const secondHalf = input.slice(halfLength).split('').reverse().join(''); 
+        const secondHalf = input.slice(halfLength).split('').reverse().join('');
         if (firstHalf === secondHalf) {
-            result.set(firstHalf, 'f'); 
+            result.set(firstHalf, 'f');
         }
     }
 
@@ -204,7 +204,7 @@ function secondRoundCandidates(string)
     addResultsToMap(candidates, processCapitalisedFirstLetter(string));
     addResultsToMap(candidates, processDoubledWords(string));
     addResultsToMap(candidates, processReversedDoubles(string));
-    
+
     return candidates;
 }
 
@@ -268,7 +268,7 @@ const handleLookupMD5 = async (pass) => {
 
   let found=false;
     try {
-      let data = await fetchData(prefix); 
+      let data = await fetchData(prefix);
       found = data.flat().some(item => {
             if (item.hash === hash) {
                 return true;
@@ -292,7 +292,7 @@ const handleLookupMD5 = async (pass) => {
 
 
 const handleLookup = async () => {
-    
+
     weakType.value=0;
     revealed.value = [];
     if(password.value.length==0)return;
@@ -345,7 +345,7 @@ const toggleHide = () => {
                     @click="toggleHide">
                     <span v-if="isHide">&check;</span>
                     <span v-if="!isHide">&cross;</span>
-                
+
                 </a>
 </div>
 
@@ -412,7 +412,7 @@ const toggleHide = () => {
           </thead>
           <tbody>
             <tr  v-for="(item, index) in revealed" :key="index">
-                <td> 
+                <td>
 
                     <span v-if="item.found" class="has-text-danger">&check;</span>
                     <span v-else class="has-text-success">&cross;</span>
@@ -455,14 +455,14 @@ const toggleHide = () => {
   <div>
     <div class="mb-4 is-flex">
   <div>
-    <p class="has-text-grey-dark">
+    <p class="has-text-grey">
       All checks happen client-side, so <strong>your password is never sent to the backend</strong>. Learn more in our <a href="https://weakpass.com/api" target="_blank">API section</a>.
     </p>
   </div>
 </div>
 <div class="mb-4 is-flex">
   <div>
-    <p class="has-text-grey-dark">
+    <p class="has-text-grey">
         The tool simulates <strong>password mutations with hashcat rules</strong> to check if your password could be cracked with rule based attacks.
 
     </p>
@@ -470,14 +470,14 @@ const toggleHide = () => {
 </div>
 <div class="mb-4 is-flex">
   <div>
-    <p class="has-text-grey-dark">
+    <p class="has-text-grey">
       Building a similar tool? Download <a href="https://weakpass.com/pre-computed" target="_blank">precomputed tables</a> today and make your own lookup tool.
     </p>
   </div>
 </div>
 <div class="mb-4 is-flex">
   <div>
-    <p class="has-text-grey-dark">
+    <p class="has-text-grey">
       <strong>TL;DR:</strong> Use a password manager like <em>1Password</em> or <em>KeePass</em> to create strong, unique passwords and stay secure online.
     </p>
   </div>
@@ -503,7 +503,7 @@ const toggleHide = () => {
 
 
 
-    
+
     <br/>
 
 </section>
