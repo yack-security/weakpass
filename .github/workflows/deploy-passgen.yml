@@ -1,0 +1,39 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'tools/passgen/**'
+      - '.github/workflows/deploy-passgen.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy passgen to Cloudflare Workers
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        working-directory: ./tools/passgen
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+        working-directory: ./tools/passgen
+
+      - name: Publish to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: "./tools/passgen"
+          command: "pages deploy --directory=dist --project-name=passgen"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
